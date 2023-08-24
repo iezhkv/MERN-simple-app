@@ -89,6 +89,11 @@ form button {
   border-radius: 4px;
   cursor: pointer;
 }
+form button:hover {
+  background: #fff;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
 div.error {
   padding: 10px;
   background: #ffefef;
