@@ -10,12 +10,14 @@ const WorkoutForm = () => {
     const [reps, setReps] = useState('')
     const [load, setLoad] = useState('')
     const [error, setError] = useState(null)
+    const [emptyFields, setEmptyFields] = useState([])
 
     const clearForm = () => {
         setTitle('')
         setReps('')
         setLoad('')
-        setError(null);
+        setError(null)
+        setEmptyFields([])
     }
 
 
@@ -35,7 +37,8 @@ const WorkoutForm = () => {
         const json = await response.json()
 
         if(!response.ok) {
-            setError(json.message);
+            setError(json.error)
+            setEmptyFields(json.emptyFields)
         }
         if(response.ok) {
             clearForm()
@@ -54,6 +57,7 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
+                className={emptyFields.includes('title') ? 'error' : ''}
             />
 
             <label>Load (in Kg):</label>
@@ -61,6 +65,8 @@ const WorkoutForm = () => {
                 type="number"
                 onChange={(e) => setLoad(e.target.value)}
                 value={load}
+                className={emptyFields.includes('load') ? 'error' : ''}
+
             />
 
             <label>Reps:</label>
@@ -68,6 +74,8 @@ const WorkoutForm = () => {
                 type="number"
                 onChange={(e) => setReps(e.target.value)}
                 value={reps}
+                className={emptyFields.includes('reps') ? 'error' : ''}
+
             />
 
             <button>Add Workout</button>
