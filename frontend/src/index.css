@@ -100,3 +100,6 @@ div.error {
 input.error {
   border: 1px solid var(--error);
 }
+.material-symbols-outlined:hover{
+  color: var(--error);
+}
