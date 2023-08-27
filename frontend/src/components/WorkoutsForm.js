@@ -83,6 +83,7 @@ const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
     const handleCancel = (e) => {
         e.preventDefault()
         clearForm()
+        setWorkoutToEdit(null)
     }
 
 
