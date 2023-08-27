@@ -112,15 +112,18 @@ const updateWorkout = async (req, res) => {
             { ...req.body },
             { new: true } // Return the updated document
         );
+
+        if(!workout) {
+            return res.status(404).json({message: 'No workout with that id'});
+        }
+        res.status(200).json(workout);
+        
     } catch (error) {
         res.status(400).json({message: error.message});
     }
     
 
-    if(!workout) {
-        return res.status(404).json({message: 'No workout with that id'});
-    }
-    res.status(200).json(workout);
+    
 };
 
 

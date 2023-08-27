@@ -4,7 +4,7 @@
 /* layout */
 :root {
   --primary: #1aac83;
-  --error: #e7195a;
+  --error: #d91b4e;
   --warning: #f5a623;
 }
 body {
@@ -99,6 +99,8 @@ form button {
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
+  border: 2px solid var(--primary);
+
 }
 form button:hover {
   background: #fff;
@@ -153,9 +155,41 @@ form.signup, form.login {
 
 .edit-button{
   background: var(--warning);
+  border: 2px solid var(--warning);
+
 }
 .edit-button:hover{
   background: #fff;
   color: var(--warning);
   border: 2px solid var(--warning);
+
+
+}
+
+.cancel-button{
+  background: #fff;
+  color: var(--error);
+  border: 2px solid var(--error);
+}
+.cancel-button:hover{
+  background: var(--error);
+  color: #fff;
+  border: 2px solid var(--error);
+}
+
+.crud-form {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  max-height: 500px;
+}
+
+.crud-buttons {
+  display: flex;
+
+  justify-content: space-between;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  height: 100%;
 }

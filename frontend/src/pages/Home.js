@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
+import { API_ENDPOINTS } from "../config/apiUrls"
+
 //  components
 import WorkoutDetails from "../components/WorkoutDetails"
 import WorkoutsForm from "../components/WorkoutsForm"
@@ -16,7 +18,7 @@ const Home = () => {
     useEffect(() => {
 
         const fetchWorkouts = async () => {
-            const response = await fetch('/api/workouts', {
+            const response = await fetch(API_ENDPOINTS.WORKOUTS, {
                 headers:{
                     'Authorization': `Bearer ${user.token}`
                 }
@@ -47,10 +49,12 @@ const Home = () => {
                     />
                 ))}
             </div>
-            <WorkoutsForm 
-                workoutToEdit={workoutToEdit}
-                setWorkoutToEdit={setWorkoutToEdit}
-            />
+            <div className="crud-form">
+                <WorkoutsForm 
+                    workoutToEdit={workoutToEdit}
+                    setWorkoutToEdit={setWorkoutToEdit}
+                />
+            </div>
         </div>
     )
 }

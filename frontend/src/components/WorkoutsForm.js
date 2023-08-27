@@ -2,6 +2,8 @@ import { useState , useEffect} from "react"
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
+import { API_ENDPOINTS } from "../config/apiUrls"
+
 
 
 const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
@@ -47,7 +49,7 @@ const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
 
         const workout = { title, reps, load }
 
-        const requestUrl = workoutToEdit ? `/api/workouts/${workoutToEdit._id}` : '/api/workouts';
+        const requestUrl = workoutToEdit ? `${API_ENDPOINTS.WORKOUTS}/${workoutToEdit._id}` : API_ENDPOINTS.WORKOUTS;
         const method = workoutToEdit ? 'PATCH' : 'POST';
 
         const response = await fetch(requestUrl, {
@@ -76,6 +78,11 @@ const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
             }
         }
 
+    }
+
+    const handleCancel = (e) => {
+        e.preventDefault()
+        clearForm()
     }
 
 
@@ -109,7 +116,11 @@ const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
 
             />
 
-            <button className={workoutToEdit ? 'edit-button' : ''}>{workoutToEdit? 'Edit Workout' : 'Add Workout'}</button>
+            <div className="crud-buttons">
+                <button className={workoutToEdit ? 'edit-button' : ''}>{workoutToEdit? 'Edit Workout' : 'Add Workout'}</button>
+                <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+            </div>
+            
             {error && <div className="error">{error}</div>}
         </form>
     )
