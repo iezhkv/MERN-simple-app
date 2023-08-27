@@ -1,5 +1,7 @@
 //setup
 const express  = require('express');
+const router = express.Router();
+
 const {
     getAllWorkouts,
     getOneWorkout,
@@ -8,8 +10,11 @@ const {
     updateWorkout,
     
 } = require('../controllers/workoutController');
-const router = express.Router();
 
+const requireAuth = require('../middlewares/requireAuth');
+
+//  require authentication for all routes
+router.use(requireAuth);
 
 //routes
 // =====================================
