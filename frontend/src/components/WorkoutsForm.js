@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useState , useEffect} from "react"
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
 
 
-const WorkoutForm = () => {
+const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
 
     const {dispatch} = useWorkoutContext()
 
@@ -25,6 +25,17 @@ const WorkoutForm = () => {
         setEmptyFields([])
     }
 
+    useEffect(() => {
+        if(workoutToEdit) {
+            setTitle(workoutToEdit.title)
+            setReps(workoutToEdit.reps)
+            setLoad(workoutToEdit.load)
+        }
+        else {
+            clearForm()
+        }
+    },[workoutToEdit])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -36,8 +47,11 @@ const WorkoutForm = () => {
 
         const workout = { title, reps, load }
 
-        const response = await fetch('/api/workouts', {
-            method: 'POST',
+        const requestUrl = workoutToEdit ? `/api/workouts/${workoutToEdit._id}` : '/api/workouts';
+        const method = workoutToEdit ? 'PATCH' : 'POST';
+
+        const response = await fetch(requestUrl, {
+            method,
             body: JSON.stringify(workout),
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +67,13 @@ const WorkoutForm = () => {
         }
         if(response.ok) {
             clearForm()
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
+
+            if(workoutToEdit) {
+                dispatch({type: 'UPDATE_WORKOUT', payload: json})
+                setWorkoutToEdit(null)
+            }else{
+                dispatch({type: 'CREATE_WORKOUT', payload: json})
+            }
         }
 
     }
@@ -61,7 +81,7 @@ const WorkoutForm = () => {
 
     return (
         <form className="create" onSubmit={handleSubmit}>
-            <h3>Add a New Workout</h3>
+            <h3>{workoutToEdit? 'Edit Workout' : 'Add a New Workout'}</h3>
 
             <label>Exercise Title:</label>
             <input
@@ -89,7 +109,7 @@ const WorkoutForm = () => {
 
             />
 
-            <button>Add Workout</button>
+            <button className={workoutToEdit ? 'edit-button' : ''}>{workoutToEdit? 'Edit Workout' : 'Add Workout'}</button>
             {error && <div className="error">{error}</div>}
         </form>
     )
