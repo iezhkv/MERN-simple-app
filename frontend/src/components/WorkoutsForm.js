@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState , useEffect} from "react"
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
+import { API_ENDPOINTS } from "../config/apiUrls"
 
 
-const WorkoutForm = () => {
+
+const WorkoutForm = ({workoutToEdit, setWorkoutToEdit}) => {
 
     const {dispatch} = useWorkoutContext()
 
@@ -25,6 +27,17 @@ const WorkoutForm = () => {
         setEmptyFields([])
     }
 
+    useEffect(() => {
+        if(workoutToEdit) {
+            setTitle(workoutToEdit.title)
+            setReps(workoutToEdit.reps)
+            setLoad(workoutToEdit.load)
+        }
+        else {
+            clearForm()
+        }
+    },[workoutToEdit])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -36,8 +49,11 @@ const WorkoutForm = () => {
 
         const workout = { title, reps, load }
 
-        const response = await fetch('/api/workouts', {
-            method: 'POST',
+        const requestUrl = workoutToEdit ? `${API_ENDPOINTS.WORKOUTS}/${workoutToEdit._id}` : API_ENDPOINTS.WORKOUTS;
+        const method = workoutToEdit ? 'PATCH' : 'POST';
+
+        const response = await fetch(requestUrl, {
+            method,
             body: JSON.stringify(workout),
             headers: {
                 'Content-Type': 'application/json',
@@ -53,15 +69,26 @@ const WorkoutForm = () => {
         }
         if(response.ok) {
             clearForm()
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
+
+            if(workoutToEdit) {
+                dispatch({type: 'UPDATE_WORKOUT', payload: json})
+                setWorkoutToEdit(null)
+            }else{
+                dispatch({type: 'CREATE_WORKOUT', payload: json})
+            }
         }
 
+    }
+
+    const handleCancel = (e) => {
+        e.preventDefault()
+        clearForm()
     }
 
 
     return (
         <form className="create" onSubmit={handleSubmit}>
-            <h3>Add a New Workout</h3>
+            <h3>{workoutToEdit? 'Edit Workout' : 'Add a New Workout'}</h3>
 
             <label>Exercise Title:</label>
             <input
@@ -89,7 +116,11 @@ const WorkoutForm = () => {
 
             />
 
-            <button>Add Workout</button>
+            <div className="crud-buttons">
+                <button className={workoutToEdit ? 'edit-button' : ''}>{workoutToEdit? 'Edit Workout' : 'Add Workout'}</button>
+                <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+            </div>
+            
             {error && <div className="error">{error}</div>}
         </form>
     )

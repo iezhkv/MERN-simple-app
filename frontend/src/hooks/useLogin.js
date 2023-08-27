@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 
+import { API_ENDPOINTS } from '../config/apiUrls';
+
 
 export const useLogin = () => {
 
@@ -12,7 +14,7 @@ export const useLogin = () => {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch('/api/user/login', {
+        const response = await fetch(API_ENDPOINTS.USER_LOGIN, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email, password})

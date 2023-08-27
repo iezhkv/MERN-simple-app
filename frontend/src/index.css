@@ -4,7 +4,8 @@
 /* layout */
 :root {
   --primary: #1aac83;
-  --error: #e7195a;
+  --error: #d91b4e;
+  --warning: #f5a623;
 }
 body {
   background: #f1f1f1;
@@ -46,6 +47,9 @@ header a {
   position: relative;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
 }
+.editing-workout {
+  border: 2px solid var(--warning);
+}
 .workout-details h4 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
@@ -56,10 +60,17 @@ header a {
   font-size: 0.9em;
   color: #555;
 }
-.workout-details span {
+
+.workout-details .actions {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 0px;
+  right: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.workout-details span {
   cursor: pointer;
   background: #f1f1f1;
   padding: 6px;
@@ -88,6 +99,8 @@ form button {
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
+  border: 2px solid var(--primary);
+
 }
 form button:hover {
   background: #fff;
@@ -105,8 +118,11 @@ div.error {
 input.error {
   border: 1px solid var(--error);
 }
-.material-symbols-outlined:hover{
+.delete:hover{
   color: var(--error);
+}
+.edit:hover{
+  color: var(--warning);
 }
 
 /* navbar */
@@ -135,4 +151,45 @@ form.signup, form.login {
   padding: 20px;
   background: #fff;
   border-radius: 4px;
+}
+
+.edit-button{
+  background: var(--warning);
+  border: 2px solid var(--warning);
+
+}
+.edit-button:hover{
+  background: #fff;
+  color: var(--warning);
+  border: 2px solid var(--warning);
+
+
+}
+
+.cancel-button{
+  background: #fff;
+  color: var(--error);
+  border: 2px solid var(--error);
+}
+.cancel-button:hover{
+  background: var(--error);
+  color: #fff;
+  border: 2px solid var(--error);
+}
+
+.crud-form {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  max-height: 500px;
+}
+
+.crud-buttons {
+  display: flex;
+
+  justify-content: space-between;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+  height: 100%;
 }

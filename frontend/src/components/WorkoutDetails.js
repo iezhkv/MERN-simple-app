@@ -1,11 +1,12 @@
 import { useWorkoutContext } from "../hooks/useWorkoutContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
+import { API_ENDPOINTS } from "../config/apiUrls"
 
 //date-fns
 import { formatDistanceToNow } from 'date-fns'
 
-const WorkoutDetails = ({workout}) => {
+const WorkoutDetails = ({workout, workoutToEdit, setWorkoutToEdit}) => {
 
     const { dispatch } = useWorkoutContext()
 
@@ -13,13 +14,14 @@ const WorkoutDetails = ({workout}) => {
 
 
 
-    const handleClick = async() => {
+    const handleDelete = async() => {
 
         if(!user) {
             return
         }
+        setWorkoutToEdit(null)
         
-        const response = await fetch('/api/workouts/' + workout._id, {
+        const response = await fetch(`${API_ENDPOINTS.WORKOUTS}/${workout._id}`, {
             method: 'DELETE',
             headers: {
             'Authorization': `Bearer ${user.token}`
@@ -33,13 +35,35 @@ const WorkoutDetails = ({workout}) => {
         }
     }
 
+    const handleEdit = () => {
+
+        //  toggle workoutToEdit
+        setWorkoutToEdit(workoutToEdit ? null : workout);
+
+    }
+
+    const isEditingThisWorkout = workoutToEdit && workoutToEdit._id === workout._id;
+
     return (
-        <div className="workout-details">
+        <div className={`workout-details ${isEditingThisWorkout ? 'editing-workout' : ''}`}>
             <h4>{workout.title}</h4>
             <p><strong>Load (kg): </strong>{workout.load}</p>
             <p><strong>Reps: </strong>{workout.reps}</p>
             <p>{formatDistanceToNow(new Date(workout.createdAt), {addSuffix: true})}</p>
-            <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
+            {isEditingThisWorkout  && (
+                <div className="actions">
+                    <span className="material-symbols-outlined delete" onClick={handleDelete}>delete</span>
+                    <span className="material-symbols-outlined edit" onClick={handleEdit}>edit</span>
+                </div>
+            )}
+            {!workoutToEdit && (
+                <div className="actions">
+                    <span className="material-symbols-outlined delete" onClick={handleDelete}>delete</span>
+                    <span className="material-symbols-outlined edit" onClick={handleEdit}>edit</span>
+                </div>
+            )}
+            
+            
 
         </div>
     )
